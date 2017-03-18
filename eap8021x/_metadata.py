@@ -2,6 +2,10 @@
 Hand crafted EAP8021X Metadata, with love
 """
 
+misc = {
+    '__EAPOLClientConfiguration'
+}
+
 
 cftypes = [
     ('EAPOLClientConfigurationRef', b'^{OpaqueEAPOLClientConfigurationRef=}', 'EAPOLClientConfigurationGetTypeID', None),

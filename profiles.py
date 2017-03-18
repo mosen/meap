@@ -15,3 +15,12 @@ def list_profiles():
     if profiles is None:
         return None
 
+    return profiles
+
+
+class EAPOLClientProfile(object):
+    """This class is a wrapper for the EAP8021X EAPOLClientProfileRef struct."""
+
+    def __init__(self, ref):
+        self._ref = ref
+
