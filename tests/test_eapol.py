@@ -12,3 +12,5 @@ class TestKeychain(object):
         profiles = list_profiles()
 
         for profile in profiles:
+            pass
+        
