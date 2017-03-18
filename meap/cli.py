@@ -1,11 +1,21 @@
 import argparse
 from Foundation import NSPropertyListSerialization, NSPropertyListXMLFormat_v1_0
-from moeap.profiles import profiles, profile_with_uuid, profile_with_iface, assign_interface
+from meap.profiles import profiles, loginwindow_profiles, profile_with_uuid, profile_with_iface, assign_interface
 from . import EAP_TYPE_DESCRIPTIONS
+
 
 def list_command(args):
     """List EAPClientProfiles Command."""
-    for p in profiles():
+    if args.loginwindow:
+        listing = loginwindow_profiles(args.loginwindow)
+    else:
+        listing = profiles()
+
+    if listing is None or len(listing) == 0:
+        print('There are no EAP profiles available.')
+        return -1
+
+    for p in listing:
         ap = p.auth_props
         if 'AcceptEAPTypes' in ap:
             eap_descriptions = [EAP_TYPE_DESCRIPTIONS[accepted] for accepted in ap['AcceptEAPTypes']]
@@ -14,7 +24,6 @@ def list_command(args):
 
         row = "UUID: {}\tName: {}\tEAP Types: {}".format(p.uuid, p.user_defined_name, ','.join(eap_descriptions))
         print(row)
-
 
 
 def show_command(args):
@@ -72,7 +81,9 @@ def main():
 
     # list command
     parser_list = subparsers.add_parser('list', help='list help')
-    parser_list.add_argument('--loginwindow', help='show only loginwindow EAPClientProfiles', action='store_true')
+    parser_list.add_argument('--loginwindow',
+                             help='show only loginwindow EAPClientProfiles associated with this interface',
+                             choices=['en0', 'en1', 'en2'])
     parser_list.add_argument('--system', help='show only system EAPClientProfiles', action='store_true')
     parser_list.set_defaults(func=list_command)
 
@@ -99,4 +110,3 @@ def main():
 
     args = parser.parse_args()
     args.func(args)
-

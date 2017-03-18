@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 setup(
-    name="moeap",
+    name="meap",
     version="0.1",
     description="An EAPClient tool for 802.1x profiles",
     packages=find_packages(),
@@ -22,7 +22,7 @@ setup(
     # ],
     entry_points={
         'console_scripts': [
-            'moeap=moeap.cli:main'
+            'meap=meap.cli:main'
         ]
     }
 )

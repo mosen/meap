@@ -52,4 +52,5 @@ functions = {
     'EAPOLClientProfileGetInformation': ('@^{OpaqueEAPOLClientProfileRef=}@',),
     'EAPOLClientConfigurationGetSystemProfile': ('^{OpaqueEAPOLClientProfileRef=}^{OpaqueEAPOLClientConfigurationRef=}@',),
     'EAPOLClientConfigurationSetSystemProfile': ('Z^{OpaqueEAPOLClientConfigurationRef=}@^{OpaqueEAPOLClientProfileRef=}',),
+    'EAPOLClientConfigurationCopyLoginWindowProfiles': ('^{__CFArray=}^{OpaqueEAPOLClientConfigurationRef=}@',),
 }

@@ -1,7 +1,8 @@
-from moeap.eap8021x import EAPOLClientConfigurationCreate, EAPOLClientConfigurationCopyProfiles, \
+from meap.eap8021x import EAPOLClientConfigurationCreate, EAPOLClientConfigurationCopyProfiles, \
     EAPOLClientProfileGetID, EAPOLClientProfileGetAuthenticationProperties, EAPOLClientProfileGetUserDefinedName, \
     EAPOLClientProfileCreatePropertyList, EAPOLClientConfigurationGetProfileWithID, EAPOLClientProfileGetInformation, \
-    EAPOLClientConfigurationGetSystemProfile, EAPOLClientConfigurationSetSystemProfile
+    EAPOLClientConfigurationGetSystemProfile, EAPOLClientConfigurationSetSystemProfile, \
+    EAPOLClientConfigurationCopyLoginWindowProfiles
 
 
 def profile_with_uuid(uuid):
@@ -37,7 +38,7 @@ def profile_with_iface(iface):
     return EAPOLClientProfile(ref)
 
 
-def assign_interface(profile_uuid, if_name='en0'):
+def assign_interface(profile_uuid, if_name='en0', loginwindow=False):
     """Assign this profile with an interface."""
     cfg = EAPOLClientConfigurationCreate(None)
     if cfg is None:
@@ -47,13 +48,16 @@ def assign_interface(profile_uuid, if_name='en0'):
     if p is None:
         raise ValueError('Cannot find profile with that UUID')
 
-    success = EAPOLClientConfigurationSetSystemProfile(
-        cfg,
-        if_name,
-        p,
-    )
+    if not loginwindow:
+        success = EAPOLClientConfigurationSetSystemProfile(
+            cfg,
+            if_name,
+            p,
+        )
 
-    return success
+        return success
+
+    return False
 
 
 #
@@ -75,16 +79,24 @@ def profiles():
         return None
 
     return [EAPOLClientProfile(ref=ref) for ref in profiles]
-#
-# def loginwindow_profiles(iface=None):
-#     """Get a list of profiles configured for LoginWindow mode.
-#
-#     Args:
-#           iface Name of the BSD interface to get a loginwindow profile for eg. 'en0'. If this is absent
-#                 then all loginwindow profiles are returned.
-#
-#     """
-#     EAPOLClientConfigurationCopyLoginWindowProfiles()
+
+def loginwindow_profiles(iface):
+    """Get a list of profiles configured for LoginWindow mode.
+
+    Args:
+          iface Name of the BSD interface to get a loginwindow profile for eg. 'en0'. If this is absent
+                then all loginwindow profiles are returned.
+
+    """
+    cfg = EAPOLClientConfigurationCreate(None)
+    if cfg is None:
+        raise ValueError('Expected config object')
+
+    profiles = EAPOLClientConfigurationCopyLoginWindowProfiles(cfg, iface)
+    if profiles is None:
+        return None
+
+    return [EAPOLClientProfile(ref=ref) for ref in profiles]
 #
 # def profile_for_ssid(ssid):
 #     # EAPOLClientConfigurationGetProfileWithWLANSSID

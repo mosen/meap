@@ -8,9 +8,9 @@ import sys
 import objc
 import CoreFoundation
 
-from moeap.eap8021x import _metadata
+from meap.eap8021x import _metadata
 
-sys.modules['moeap.eap8021x'] = mod = objc.ObjCLazyModule(
+sys.modules['meap.eap8021x'] = mod = objc.ObjCLazyModule(
     'EAP8021X', 'com.apple.SystemConfiguration.EAP8021X',
     objc.pathForFramework("/System/Library/PrivateFrameworks/EAP8021X.framework"),
     _metadata.__dict__, None, {
@@ -21,4 +21,4 @@ sys.modules['moeap.eap8021x'] = mod = objc.ObjCLazyModule(
     }, (CoreFoundation,))
 
 import sys
-del sys.modules['moeap.eap8021x._metadata']
+del sys.modules['meap.eap8021x._metadata']
